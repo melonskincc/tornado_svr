@@ -14,7 +14,7 @@ async def init_engine():
     try:
         return await sa.create_engine(**DB, autocommit=True, echo=True,
                                       charset='utf8'), await aioredis.create_redis_pool(
-            REDIS_ADDR, maxsize=20)
+            REDIS_ADDR, maxsize=20, encoding='utf-8')
     except Exception as e:
         print(repr(e))
         exit(1)
