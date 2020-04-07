@@ -7,7 +7,7 @@ logger = logging.getLogger('abc')
 
 
 class BaseHandler(RequestHandler, ABC):
-    def initialize(self, mysql,redis):
+    def initialize(self, mysql, redis):
         self.db = mysql
         self.redis = redis
 
@@ -19,6 +19,7 @@ class IndexHandler(BaseHandler, ABC):
         self.write('Index!!!')
         with await self.redis as redis_conn:
             print(await redis_conn.get('a'))
+            print(await redis_conn.hset('s', 'b', 'y'))
         async with self.db.acquire() as conn:
             # tran = await conn.begin()
             # ret = await conn.execute(tbl_user.insert().values(name='a'))
