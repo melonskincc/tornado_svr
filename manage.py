@@ -3,7 +3,7 @@ from logging.config import dictConfig
 from conf.settings import *
 import tornado.ioloop
 import tornado.web
-import uvloop
+import uvloop, aioredis
 from tornado.httpserver import HTTPServer
 from aiomysql import sa
 # from aiomysql.cursors import DictCursor
@@ -12,7 +12,9 @@ from handlers.user_handler import IndexHandler
 
 async def init_engine():
     try:
-        return await sa.create_engine(**DB, autocommit=True, echo=True, charset='utf8')
+        return await sa.create_engine(**DB, autocommit=True, echo=True,
+                                      charset='utf8'), await aioredis.create_redis_pool(
+            REDIS_ADDR, maxsize=20)
     except Exception as e:
         print(repr(e))
         exit(1)
@@ -23,9 +25,9 @@ def init_log():
 
 
 def make_app():
-    mysql = tornado.ioloop.IOLoop.current().run_sync(init_engine)
+    mysql, redis = tornado.ioloop.IOLoop.current().run_sync(init_engine)
     return tornado.web.Application([
-        (r'/', IndexHandler, dict(mysql=mysql))
+        (r'/', IndexHandler, dict(mysql=mysql, redis=redis))
     ],
         **SETTINGS
     )

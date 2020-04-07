@@ -14,6 +14,7 @@ DB = {
     'db': 'testa'
 }
 
+REDIS_ADDR = 'redis://127.0.0.1:6379/0'
 HOST = '127.0.0.1'
 PORT = 9090
 # log日志
