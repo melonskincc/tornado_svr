@@ -1,4 +1,4 @@
-1.模型类使用sqlalchemy
+1.模型类使用sqlalchemy.orm
 
 2.aiomysql可能还有很对问题有待官方解决，不支持多DictCursor...
 
